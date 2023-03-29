@@ -1,37 +1,40 @@
-#include "main.h"
+#includ "main.h"
 /**
- * printf_rot13 - printf str to ROT13 place into buffer
- * @args: type struct va_arg where is allocated printf arguments
- * Return: counter
- *
+ * rot13 - encrypts string with rot13
+ * @list: string to change
+ * Return: modified string
  */
-int printf_rot13(va_list args)
+char *rot13(va_list list)
 {
-	int i, j, counter = 0;
-	int k = 0;
-	char *s = va_arg(args, char*);
-	char alpha[] = {"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
-	char beta[] = {"nopqrstuvwxyzabcdefghijklmNOPQRSTUVWXYZABCDEFGHIJKLM"};
+	int i = 0;
+	char *str;
+	char *nstr;
 
-	if (s == NULL)
-		s = "(null)";
-	for (i = 0; s[i]; i++)
+	/* store va_arg to only access argument once */
+	str = va_arg(list, char *);
+
+	/* malloc new variable to assign over new rot13 characters */
+	nstr = malloc(sizeof(char) * (_strlen(str) + 1));
+	if (nstr == NULL)
+		return (NULL);
+
+	/* iterate str and assign rot13 char to nstr */
+	while (str[i] != '\0')
 	{
-		k = 0;
-		for (j = 0; alpha[j] && !k; j++)
+		if ((str[i] >= 'a' && str[i] <= 'm') || (str[i] >= 'A' && str[i] <= 'M'))
 		{
-			if (s[i] == alpha[j])
-			{
-				_putchar(beta[j]);
-				counter++;
-				k = 1;
-			}
+			nstr[i] = str[i] + 13;
 		}
-		if (!k)
+		else if ((str[i] >= 'n' && str[i] <= 'z') ||
+				(str[i] >= 'N' && str[i] <= 'Z'))
 		{
-			_putchar(s[i]);
-			counter++;
+			nstr[i] = str[i] - 13;
 		}
+		else
+			(nstr[i] = str[i]);
+		i++;
 	}
-	return (counter);
+	nstr[i] = '\0';
+
+	return (nstr);
 }
